@@ -1,0 +1,47 @@
+// 題目：Roman to Integer
+// 給定一個字串 s (1 <= s.length <= 15)，表示一個有效的羅馬數字，將它轉換成整數。
+// 羅馬數字規則：
+// 1. 一般情況下，從左到右由大到小相加。
+// 2. 特殊情況：出現 6 種「減法表示法」時，需要做減法：
+//    - IV = 4, IX = 9
+//    - XL = 40, XC = 90
+//    - CD = 400, CM = 900
+
+class Solution {
+    public int romanToInt(String s) {
+        Map<Character, Integer> map = new HashMap<>();
+        map.put('I', 1);
+        map.put('V', 5);
+        map.put('X', 10);
+        map.put('L', 50);
+        map.put('C', 100);
+        map.put('D', 500);
+        map.put('M', 1000);
+
+        int total = 0;
+        for (int i = 0; i < s.length(); i++) {
+            int value = map.get(s.charAt(i));
+            // 若當前值比後一個值小，表示是「減法情況」
+            if (i + 1 < s.length() && value < map.get(s.charAt(i + 1))) {
+                total -= value;
+            } else {
+                total += value;
+            }
+        }
+        return total;
+    }
+}
+
+/*
+解題思路：
+1. 建立一個 HashMap，將每個羅馬字元對應的數值存起來。
+2. 從左到右掃描字串：
+   - 若當前字元比下一個字元小，表示是「減法情況」，需要減去該值。
+   - 否則就加上該值。
+3. 最後得到整數結果。
+4. 範例：
+   s = "MCMXCIV"
+   M(1000) + CM(900) + XC(90) + IV(4) = 1994
+5. 時間複雜度 O(n)，其中 n = s.length
+   空間複雜度 O(1)，因為字典大小固定。
+*/
